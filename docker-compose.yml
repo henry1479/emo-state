@@ -1,0 +1,51 @@
+version: '3.7'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      DB_HOST: 127.0.O.1
+      DB_PORT: 5432
+      DB_USERNAME: root
+      DB_PASSWORD: test
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app/backend
+    depends_on:
+      - pgsql
+    networks:
+      - app
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+        - "5173:5173"
+    volumes:
+      - ./frontend:/app/frontend
+    depends_on:
+      - backend
+    networks:
+      - app
+
+  pgsql:
+    image: postgres:13.0
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_DB=emo_lab
+    volumes:
+      - ./data/postgres:/var/lib/postgres/data
+    networks:
+      - app
+
+
+networks:
+  app:
+    driver: bridge
