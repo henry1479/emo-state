@@ -4,6 +4,6 @@
 </pre>
 
 <p>
-  docker-compose up -d
+  docker-compose up -d <br/>
   Использовался собственный образ Laravel, Node и Postgres 
 </p>
